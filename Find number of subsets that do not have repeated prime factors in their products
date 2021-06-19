@@ -15,12 +15,16 @@ int factors(int n)
 	return 0;
 }
 
-void subsetsUtil(vector<int>& A, vector<vector<int> >& res, vector<int>& subset, int index)
+void subsetsUtil(vector<int>& A, vector<int>& subset, int index, vector<int>& result)
 {
-    res.push_back(subset);
+    int temp=1;
+    for(int j=0;j<subset.size();j++){
+        temp*=subset[j];
+    }
+    result.push_back(temp);
     for (int i = index; i < A.size(); i++) {
         subset.push_back(A[i]);
-        subsetsUtil(A, res, subset, i + 1);
+        subsetsUtil(A, subset, i + 1, result);
         subset.pop_back();
     }
     return;
@@ -28,42 +32,23 @@ void subsetsUtil(vector<int>& A, vector<vector<int> >& res, vector<int>& subset,
 int subsets(vector<int>& A)
 {
     vector<int> subset;
-    vector<vector<int> > res;
-    int index = 0, temp=1;
-    subsetsUtil(A, res, subset, index);
-    vector<int> product;
-    cout<<res.size()<<endl;
-    for (int i = 0; i < res.size(); i++) {
-        for (int j = 0; j < res[i].size(); j++)
-            cout << res[i][j] << " ";
-        cout << endl;
-    }
-    cout<<endl<<endl;
-    for (int i = 0; i < res.size(); i++) {
-        for (int j = 0; j < res[i].size(); j++){
-            temp*=res[i][j];
-        }
-        product.push_back(temp);
-        cout<<product[i]<<" ";
-        temp=1;
-    }
+    vector<int> result;
+    int index = 0;
+    subsetsUtil(A, subset, index, result);
     int count=0;
-    for(int i=0;i<product.size();i++){
-        if(factors(product[i])==0) count++;
+    for(int i=0;i<result.size();i++){
+        if(factors(result[i])==0) count++;
     }
     return count-1;
 }
 
 int main(){
-    vector<int> arr={4,2,3,15};
+    vector<int> arr={2,6,12};
     for(int i=0;i<arr.size();i++){
         if(factors(arr[i])==1){
             arr.erase(remove(arr.begin(), arr.end(), arr[i]), arr.end());
-            //arr[i]=0;
         }
-        //else arr[i]=1;
     }
-    int count = subsets(arr);
-    cout<<endl<<endl<<count;
+    cout<<subsets(arr);
     return 0;
 }
