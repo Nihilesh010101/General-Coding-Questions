@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+#define ROW 3 
+#define COL 3 
+int visited[ROW][COL];
+
+void DFS(int grid[][COL],int row,int col,int count){
+     if (row < 0 || col < 0 || row >= ROW || col >= COL || visited[row][col])
+            return;
+    if(grid[row][col]==0) return;
+    if(grid[row][col]==9){
+        cout<<count<<" ";
+        exit(1);
+    }
+    visited[row][col]=1;
+    DFS(grid, row+ 1, col, count+1); // go right
+    DFS(grid, row- 1, col,count+1); //go left
+    DFS(grid, row, col + 1,count+1); //go down
+    DFS(grid, row, col - 1,count+1); // go up
+}
+
+int main()
+{
+    int grid[ROW][COL]={{1,1},{1,1},{1,9,1}};
+    DFS(grid,0,0,0);
+    return 0;
+}
